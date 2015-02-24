@@ -4,8 +4,9 @@ $(function() {
         if (command === 'help') {
             term.echo(
                 'Доступные команды:\n' +
-                '  auth     авторизоваться в системе\n'+
-                '  getgift  получить подарок'
+                '  auth            авторизоваться в системе\n'+
+                '  getgratters     получить поздравления\n'+
+                '  getgift         получить подарок\n'
             );
         } else if (command === 'auth') {
             var attempts = 1;
@@ -29,7 +30,7 @@ $(function() {
                     term.echo('Так бы ответила Эля!');
                     currentQuestion++;
                     if (currentQuestion === questions.length) {
-                        term.echo('\nВы успешно авторизованы!');
+                        term.echo('\nВы успешно авторизованы!\n');
                         localStorage.setItem('el-auth', 'ok');
                     }
                     if (currentQuestion >= questions.length) { term.pop(); return; }
@@ -37,7 +38,7 @@ $(function() {
                 } else {
                     term.echo('Эля бы так не ответила!');
                     if (++attempts > 3) {
-                        term.echo('Превышено количество попыток входа. Попробуйте снова.');
+                        term.echo('Превышено количество попыток входа. Попробуйте снова.\n');
                         term.pop();
                     }
                     term.echo('\n' + questions[currentQuestion][0]);
@@ -49,16 +50,26 @@ $(function() {
 
         } else if (command === 'getgift') {
             if (localStorage.getItem('el-auth')) {
-                term.echo('На подарок!');
+                term.echo('Получите подарок у Александра назвав секретный код [[b;#ff0000;#000]42]');
             } else {
-                term.echo('Вы не авторизованы!');
+                term.echo('Вы не авторизованы! Подарок только для Эли!');
+            }
+        }  else if (command === 'getgratters') {
+            if (localStorage.getItem('el-auth')) {
+                term.echo(
+                    'Дорогая [[b;#4752e0;#000]Эля]!\n' +
+                    'Поздравляю тебя с [[b;#dc143c;#000]Днём Рождения]!\n' +
+                    'Желаю добра и весёлых [[b;#468499;#000]приключений]!\n'
+                );
+            } else {
+                term.echo('Вы не авторизованы! Поздравления только для Эли!');
             }
         } else if (command === 'unauth') {
             localStorage.removeItem('el-auth');
         } else {
             term.echo(
                 'Неизвестная команда\n' +
-                'Для вызова справки наберите [[b;#0E1;#000]help]'
+                'Для вызова справки наберите [[b;#0E1;#000]help]\n'
             );
         }
     }, {
