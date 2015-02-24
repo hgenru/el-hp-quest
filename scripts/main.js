@@ -62,7 +62,7 @@ $(function() {
                     cake.innerHTML
                 );
             } else {
-                term.echo('Вы не авторизованы! Поздравления только для Эли!');
+                term.echo('Вы не авторизованы! Тортик только для Эли!');
             }
         } else if (command === 'unauth') {
             localStorage.removeItem('el-auth');
