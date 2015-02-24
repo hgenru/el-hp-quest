@@ -8,11 +8,57 @@ $(function() {
                 '  getgift\tполучить подарок'
             );
         } else if (command === 'auth') {
-            term.echo('На подарок');
+            var attempts = 1;
+            var answers = 0;
+            term.echo(
+                'Авторизация в системе получения подарка\n' +
+                'Нажмите [[b;#0E1;#000]ctrl+D] для выхода из системы авторизации\n' +
+                'Пожалуйста, подтвердите, что вы не робот, а Эля\n' +
+                'Пожалуйста ответьте на несколько вопросов:\n'
+            );
+            term.echo();
+            var currentQuestion = 0;
+            var questions = [
+                ['Введите номер вашего любимого Доктора', function(c) {return c === '10';}],
+                ['Чье молоко в дозированных сливках?', function(c) {return c.match(/олен/);}]
+            ];
+            term.echo(questions[currentQuestion][0]);
+            term.push(function(command, term) {
+                if (questions[currentQuestion][1](command)) {
+                    term.echo('Так бы ответила Эля!');
+                    currentQuestion++;
+                    if (currentQuestion === questions.length) {
+                        term.echo('\nВы успешно авторизованы!');
+                        localStorage.setItem('el-auth', 'ok');
+                    }
+                    if (currentQuestion >= questions.length) { term.pop(); return; }
+                    term.echo('\n' + questions[currentQuestion][0]);
+                } else {
+                    term.echo('Эля бы так не ответила!');
+                    if (++attempts > 3) {
+                        term.echo('Превышено количество попыток входа. Попробуйте снова.');
+                        term.pop();
+                    }
+                    term.echo('\n' + questions[currentQuestion][0]);
+                }
+            }, {
+                prompt: 'Ваш ответ: ',
+                name: 'auth.dw'
+            });
+
         } else if (command === 'getgift') {
-            term.echo('На подарок');
+            if (localStorage.getItem('el-auth')) {
+                term.echo('На подарок!');
+            } else {
+                term.echo('Вы не авторизованы!');
+            }
+        } else if (command === 'unauth') {
+            localStorage.removeItem('el-auth');
         } else {
-            term.echo('Для вызова справки наберите `help`');
+            term.echo(
+                'Неизвестная команда\n' +
+                'Для вызова справки наберите [[b;#0E1;#000]help]'
+            );
         }
     }, {
         greetings: null,
@@ -23,6 +69,9 @@ $(function() {
             for (var i=resize.length;i--;) {
                 resize[i](term);
             }
+        },
+        onBlur: function() {
+            return false;
         }
     });
 });
