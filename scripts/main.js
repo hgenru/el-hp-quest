@@ -4,9 +4,9 @@ $(function() {
         if (command === 'help') {
             term.echo(
                 'Доступные команды:\n' +
-                '  auth            авторизоваться в системе\n'+
-                '  getgratters     получить поздравления\n'+
-                '  getgift         получить подарок\n'
+                '  getcake         получить тортик\n'+
+                '  getgift         получить подарок\n' +
+                '  auth            system auth\n'
             );
         } else if (command === 'auth') {
             var attempts = 1;
@@ -50,16 +50,16 @@ $(function() {
 
         } else if (command === 'getgift') {
             if (localStorage.getItem('el-auth')) {
-                term.echo('Получите подарок у Александра назвав секретный код [[b;#ff0000;#000]42]');
+                term.echo('Назовите Александру секретный код [[b;#ff0000;#000]42]');
             } else {
                 term.echo('Вы не авторизованы! Подарок только для Эли!');
             }
-        }  else if (command === 'getgratters') {
+        }  else if (command === 'getcake') {
             if (localStorage.getItem('el-auth')) {
+                cake = document.getElementById('cake');
                 term.echo(
-                    'Дорогая [[b;#4752e0;#000]Эля]!\n' +
-                    'Поздравляю тебя с [[b;#dc143c;#000]Днём Рождения]!\n' +
-                    'Желаю добра и весёлых [[b;#468499;#000]приключений]!\n'
+                    '\n         Сегодня [[b;#4752e0;#000]тортик] -- это не [[b;#dc143c;#000]ложь]!\n' +
+                    cake.innerHTML
                 );
             } else {
                 term.echo('Вы не авторизованы! Поздравления только для Эли!');
